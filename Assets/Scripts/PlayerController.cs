@@ -47,22 +47,24 @@ public class PlayerController : MonoBehaviour
 
         _animator.SetFloat("Horizontal", _horizontal);
         _animator.SetFloat("Vertical", _vertical);
-
-        /*if (horizontal > 0) Debug.Log(" sağ ");
-        else Debug.Log("sol");
-
-        if (vertical > 0) Debug.Log("yukarı");
-        else Debug.Log("aşağı");*/
     }
 
-
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if (other.gameObject.CompareTag("Bed"))
+        if (collision.gameObject.CompareTag("Bed"))
         {
             Message();
         }
+        else sleepPanel.SetActive(false);
     }
+
+    /*private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Bed"))
+        {
+            sleepPanel.SetActive(false);
+        }
+    }*/
 
     private void Message()
     {
@@ -77,7 +79,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator CloseEye()
     {
         nightPanel.SetActive(true);
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2f);
         SceneManager.LoadScene("Dream");
     }
 }
