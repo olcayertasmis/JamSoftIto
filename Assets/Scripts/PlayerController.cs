@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
 
     [Header("Değişkenler")]
     [SerializeField] private float speed;
-    private float _horizontal, _vertical;
     [SerializeField] private float jumpPower;
     static bool _isEat;
     static float _jumpBuff;
@@ -34,32 +33,39 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    private void FixedUpdate()
+    private void Start()
+    {
+    }
+
+    private void Update()
     {
         Move();
     }
 
     private void Move()
     {
-        _horizontal = Input.GetAxis("Horizontal");
-        _vertical = Input.GetAxis("Vertical");
+        float Abc = Input.GetAxisRaw("Horizontal");
+        float Cbc = Input.GetAxisRaw("Vertical");
 
         var activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
         if (activeSceneIndex == 0)
-            _rb.velocity = new Vector2(_horizontal * (speed * Time.deltaTime), _vertical * (speed * Time.deltaTime));
+            _rb.velocity = new Vector2(Abc, Cbc);
 
         else
         {
-            _rb.velocity = new Vector2(_horizontal * (speed * Time.deltaTime), 0);
-
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 _rb.AddForce(Vector2.up * (jumpPower + _jumpBuff), ForceMode2D.Impulse);
             }
+            else
+            {
+                _rb.velocity = new Vector2(Abc, 0) * (speed);
+            }
         }
 
-        _animator.SetFloat("Horizontal", _horizontal);
-        _animator.SetFloat("Vertical", _vertical);
+        _animator.SetFloat("Horizontal", Abc);
+        _animator.SetFloat("Vertical", Cbc);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
